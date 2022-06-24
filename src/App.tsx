@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./TodoList";
 
-function App() {
+const App = () => {
     const title_1: string = "What to learn"
     const title_2: string = "What to buy?"
 
