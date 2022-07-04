@@ -1,44 +1,70 @@
-import React from 'react';
-
-export type TaskType = {
-    id: number
-    title: string
-    isDone: boolean
-}
+import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import {FilterValueType} from "./App";
 
 type TodoListPropsType = {
     title: string
     tasks: Array<TaskType>
+    removeTask: (taskID: string) => void
+    changeFilter: (filter: FilterValueType) => void
+    addTask: (title: string) => void
+}
+
+export type TaskType = {
+    id: string
+    title: string
+    isDone: boolean
 }
 
 
 const TodoList = (props: TodoListPropsType) => {
+
+    const [title, setTitle] = useState(' ') //для временного хранения новых тасок
+    // затем передаем параметр в функцию addTask
+
+    const tasksListItems = props.tasks.map(task => {
+        return (
+            <li>
+                <input type="checkbox" checked={task.isDone}/>
+                <span>{task.title}</span>
+                <button onClick={() => props.removeTask(task.id)}>x</button>
+            </li>
+        )
+
+    })
+
+    const onClickAddTaskHandler = () => {        // вынесенная функция для баттон по добавлению таск
+        props.addTask(title)
+        setTitle('')
+    }
+
+    const onKeyDownAddTask = (event: KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter' && event.ctrlKey) {
+            onClickAddTaskHandler()
+        }
+    }
+
+    const onChangeSetTitle = (event: ChangeEvent<HTMLInputElement>) => {
+        setTitle(event.currentTarget.value)
+    }
     return (
         <div>
             <h3>{props.title}</h3>
             <div>
-                <input/>
-                <button>+</button>
+                <input
+                    value={title}
+                    onChange={onChangeSetTitle}     //функция для ввода данных
+                    onKeyDown={onKeyDownAddTask}   //функция по вводу данных по клавише ctrl+enter
+                />
+
+                <button onClick={onClickAddTaskHandler}>+</button>
             </div>
             <ul>
-                <li>
-                    <input type="checkbox" checked={props.tasks[0].isDone}/>
-                    <span>{props.tasks[0].title}</span>
-                </li>
-                <li>
-                    <input type="checkbox" checked={props.tasks[1].isDone}/>
-                    <span>{props.tasks[1].title}</span>
-                </li>
-                <li>
-                    <input type="checkbox" checked={props.tasks[2].isDone}/>
-                    <span>{props.tasks[2].title}</span>
-                </li>
-
+                {tasksListItems}
             </ul>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+                <button onClick={() => props.changeFilter("All")}>All</button>
+                <button onClick={() => props.changeFilter("Active")}>Active</button>
+                <button onClick={() => props.changeFilter("Completed")}>Completed</button>
             </div>
         </div>
 
