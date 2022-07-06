@@ -46,6 +46,19 @@ const TodoList = (props: TodoListPropsType) => {
     const onChangeSetTitle = (event: ChangeEvent<HTMLInputElement>) => {
         setTitle(event.currentTarget.value)
     }
+
+    const onAllClickHandler =()=>{
+        props.changeFilter('All')
+    }
+
+    const onActiveClickHandler =()=>{
+        props.changeFilter('Active')
+    }
+
+    const onCompletedClickHandler =()=>{
+        props.changeFilter('Completed')
+    }
+
     return (
         <div>
             <h3>{props.title}</h3>
@@ -62,9 +75,9 @@ const TodoList = (props: TodoListPropsType) => {
                 {tasksListItems}
             </ul>
             <div>
-                <button onClick={() => props.changeFilter("All")}>All</button>
-                <button onClick={() => props.changeFilter("Active")}>Active</button>
-                <button onClick={() => props.changeFilter("Completed")}>Completed</button>
+                <button onClick={onAllClickHandler}>All</button>
+                <button onClick={onActiveClickHandler}>Active</button>
+                <button onClick={onCompletedClickHandler}>Completed</button>
             </div>
         </div>
 
