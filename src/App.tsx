@@ -7,8 +7,6 @@ export type FilterValueType = 'All' | 'Active' | 'Completed'
 
 const App = () => {
     const title: string = "What to learn"
-    console.log(v1())
-
     const [tasks, setTasks] = useState<TaskType[]>([
         {id: v1(), title: "HTML", isDone: true},
         {id: v1(), title: "CSS", isDone: true},
@@ -16,21 +14,17 @@ const App = () => {
         {id: v1(), title: "React", isDone: false},
     ])
 
+    const [filter, setFilter] = useState<FilterValueType>('All')
     //добавляем новую таску. Жестко ее создаем и сетаем. Потом накидываем эту функцию на кнопку +
     const addTask = (title: string) => {
         const newTask: TaskType = {id: v1(), title: title, isDone: false}
         setTasks([newTask, ...tasks])
     }
 
-
     const removeTask = (taskID: string) => {
         const updatedTasks = tasks.filter(task => task.id !== taskID)
         setTasks(updatedTasks)
     }
-
-
-    const [filter, setFilter] = useState<FilterValueType>('All')
-
 
     let tasksForRender;
     switch (filter) {
@@ -48,13 +42,19 @@ const App = () => {
         setFilter(value)
     }
 
+    const changeTaskStatus = (taskID: string, isDone: boolean) => {
+        setTasks(tasks.map(t => t.id === taskID ? {...t, isDone: isDone} : t))
+    }
+
     return (
         <div className="App">
             <TodoList title={title}
                       tasks={tasksForRender}
+                      filter={filter}
+                      addTask={addTask}
                       removeTask={removeTask}
                       changeFilter={changeFilter}
-                      addTask={addTask}/>
+                      changeTaskStatus={changeTaskStatus}/>
 
         </div>
     );
