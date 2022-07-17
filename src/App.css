@@ -1,19 +1,25 @@
 .App {
-  padding: 30px;
-  display: flex;
+    padding: 30px;
+    display: flex;
 }
 
 .App > div {
-  margin-right: 50px;
+    margin-right: 50px;
 }
 
-.isDone{
-  text-decoration: line-through;
-  color: gray;
-  font-weight: lighter;
+.isDone {
+    text-decoration: line-through;
+    color: gray;
+    font-weight: lighter;
 }
 
-.active{
-  background-color: green;
-  color: white;
+.active {
+    background-color: green;
+    color: white;
+    font-weight: bold;
+}
+
+.error {
+    border: 3px solid red;
+    outline: none;
 }
