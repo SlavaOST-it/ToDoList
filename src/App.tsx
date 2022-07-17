@@ -3,7 +3,7 @@ import './App.css';
 import TodoList, {TaskType} from "./TodoList";
 import {v1} from 'uuid';
 
-export type FilterValueType = 'All' | 'Active' | 'Completed'
+export type FilterValueType = 'all' | 'active' | 'completed'
 
 const App = () => {
     const title: string = "What to learn"
@@ -14,7 +14,7 @@ const App = () => {
         {id: v1(), title: "React", isDone: false},
     ])
 
-    const [filter, setFilter] = useState<FilterValueType>('All')
+    const [filter, setFilter] = useState<FilterValueType>('all')
     //добавляем новую таску. Жестко ее создаем и сетаем. Потом накидываем эту функцию на кнопку +
     const addTask = (title: string) => {
         const newTask: TaskType = {id: v1(), title: title, isDone: false}
@@ -28,10 +28,10 @@ const App = () => {
 
     let tasksForRender;
     switch (filter) {
-        case 'Completed':
+        case 'completed':
             tasksForRender = tasks.filter(t => t.isDone)
             break
-        case 'Active':
+        case 'active':
             tasksForRender = tasks.filter(t => !t.isDone)
             break
         default:

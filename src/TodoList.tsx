@@ -81,9 +81,9 @@ const TodoList = (props: TodoListPropsType) => {
                 {tasksListItems}
             </ul>
             <div>
-                <Button name={'All'} className={'active'} callBack={() => tsarClickHandler('all')}/>
-                <Button name={'Active'} className={'active'} callBack={() => tsarClickHandler('active')}/>
-                <Button name={'Completed'} className={'active'} callBack={() => tsarClickHandler('completed')}/>
+                <Button name={'All'} className={props.filter === 'all' ? 'active' : ''} callBack={() => tsarClickHandler('all')}/>
+                <Button name={'Active'} className={props.filter === 'active' ? 'active' : ''} callBack={() => tsarClickHandler('active')}/>
+                <Button name={'Completed'} className={props.filter === 'completed' ? 'active' : ''} callBack={() => tsarClickHandler('completed')}/>
             </div>
         </div>
 
