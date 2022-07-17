@@ -1,7 +1,8 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, useState} from 'react';
+import './App.css';
 import {FilterValueType} from "./App";
 import {Button} from "./components/Button";
-import {InputButton} from "./components/InputButton";
+import {Input} from "./components/Input";
 
 
 type TodoListPropsType = {
@@ -22,8 +23,8 @@ export type TaskType = {
 
 
 const TodoList = (props: TodoListPropsType) => {
-    // const [title, setTitle] = useState(' ') //для временного хранения новых тасок затем передаем параметр в функцию addTask
-    // const [error, setError] = useState<boolean>(false)
+    const [title, setTitle] = useState(' ') //для временного хранения новых тасок затем передаем параметр в функцию addTask
+    const [error, setError] = useState<boolean>(false)
 
     const tasksListItems = props.tasks.length
         ? props.tasks.map(task => {
@@ -39,37 +40,23 @@ const TodoList = (props: TodoListPropsType) => {
                         checked={task.isDone}
                     />
                     <span className={task.isDone ? 'isDone' : ''}>{task.title}</span>
-                    <Button name={'x'} callBack={removeTask}/>
+                    <Button name={'x'} callBack={removeTask} className={''}/>
                 </li>
             )
 
         })
         : <span>Введите задачу</span>
-// // вынесенная функция для баттон по добавлению таск
-//     const addTaskHandler = () => {
-//         const trimmedTitle = title.trim()
-//         if (trimmedTitle) {
-//             props.addTask(trimmedTitle)
-//         } else {
-//             setError(true)
-//         }
-//         setTitle('')
-//     }
 
-//ввод данных по нажатию клавиш
-//     const onKeyDownAddTask = (event: KeyboardEvent<HTMLInputElement>) => {
-//         if (event.key === 'Enter' && event.ctrlKey) {
-//             addTaskHandler()
-//         }
-//     }
-// //функция для ввода данных
-//     const onChangeSetTitle = (event: ChangeEvent<HTMLInputElement>) => {
-//         if (error) {
-//             setError(false)
-//         }
-//         setTitle(event.currentTarget.value)
-//     }
-
+// вынесенная функция для баттон по добавлению таск
+    const addTaskHandler = () => {
+        const trimmedTitle = title.trim()
+        if (trimmedTitle) {
+            props.addTask(trimmedTitle)
+        } else {
+            setError(true)
+        }
+        setTitle('')
+    }
 
     const tsarClickHandler = (filterValue: FilterValueType) => {
         props.changeFilter(filterValue)
@@ -79,28 +66,24 @@ const TodoList = (props: TodoListPropsType) => {
         <div>
             <h3>{props.title}</h3>
             <div>
-                <InputButton
-                    callBack={props.addTask}/>
+                <Input
+                    title={title}
+                    setTitle={setTitle}
+                    error={error}
+                    setError={setError}
+                    callBack={addTaskHandler}/>
 
-
-                {/*<input*/}
-                {/*    value={title}*/}
-                {/*    onChange={onChangeSetTitle}     //функция для ввода данных*/}
-                {/*    onKeyDown={onKeyDownAddTask}   //функция по вводу данных по клавише ctrl+enter*/}
-                {/*    className={error ? 'error' : ''}*/}
-                {/*/>*/}
-                {/*<button onClick={addTaskHandler}>+</button>*/}
-
-                {/*{error && <div style={{color: "red"}}>Title is required!</div>}*/}
+                <Button name={'+'} className={''} callBack={addTaskHandler}/>
+                {error && <div style={{color: "red"}}>Title is required!</div>}
 
             </div>
             <ul>
                 {tasksListItems}
             </ul>
             <div>
-                <Button name={'All'} callBack={() => tsarClickHandler('all')}/>
-                <Button name={'Active'} callBack={() => tsarClickHandler('active')}/>
-                <Button name={'Completed'} callBack={() => tsarClickHandler('completed')}/>
+                <Button name={'All'} className={'active'} callBack={() => tsarClickHandler('all')}/>
+                <Button name={'Active'} className={'active'} callBack={() => tsarClickHandler('active')}/>
+                <Button name={'Completed'} className={'active'} callBack={() => tsarClickHandler('completed')}/>
             </div>
         </div>
 
