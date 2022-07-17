@@ -4,6 +4,7 @@ import React from "react";
 type ButtonType = {
     name: string,
     callBack: () => void
+    className: string
 }
 
 
