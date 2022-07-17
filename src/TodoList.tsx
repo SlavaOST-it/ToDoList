@@ -1,5 +1,7 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent} from 'react';
 import {FilterValueType} from "./App";
+import {Button} from "./components/Button";
+import {InputButton} from "./components/InputButton";
 
 
 type TodoListPropsType = {
@@ -20,90 +22,89 @@ export type TaskType = {
 
 
 const TodoList = (props: TodoListPropsType) => {
-    const [title, setTitle] = useState(' ') //для временного хранения новых тасок затем передаем параметр в функцию addTask
+    // const [title, setTitle] = useState(' ') //для временного хранения новых тасок затем передаем параметр в функцию addTask
+    // const [error, setError] = useState<boolean>(false)
+
+    const tasksListItems = props.tasks.length
+        ? props.tasks.map(task => {
+            const removeTask = () => props.removeTask(task.id)
+            const changeTaskStatus = (event: ChangeEvent<HTMLInputElement>) =>
+                props.changeTaskStatus(task.id, event.currentTarget.checked)
+
+            return (
+                <li>
+                    <input
+                        onChange={changeTaskStatus}
+                        type="checkbox"
+                        checked={task.isDone}
+                    />
+                    <span className={task.isDone ? 'isDone' : ''}>{task.title}</span>
+                    <Button name={'x'} callBack={removeTask}/>
+                </li>
+            )
+
+        })
+        : <span>Введите задачу</span>
+// // вынесенная функция для баттон по добавлению таск
+//     const addTaskHandler = () => {
+//         const trimmedTitle = title.trim()
+//         if (trimmedTitle) {
+//             props.addTask(trimmedTitle)
+//         } else {
+//             setError(true)
+//         }
+//         setTitle('')
+//     }
+
+//ввод данных по нажатию клавиш
+//     const onKeyDownAddTask = (event: KeyboardEvent<HTMLInputElement>) => {
+//         if (event.key === 'Enter' && event.ctrlKey) {
+//             addTaskHandler()
+//         }
+//     }
+// //функция для ввода данных
+//     const onChangeSetTitle = (event: ChangeEvent<HTMLInputElement>) => {
+//         if (error) {
+//             setError(false)
+//         }
+//         setTitle(event.currentTarget.value)
+//     }
 
 
-    const tasksListItems = props.tasks.map(task => {
-        const removeTask = () => props.removeTask
-        const changeTaskStatus = (event: ChangeEvent<HTMLInputElement>) =>
-            props.changeTaskStatus(task.id, event.currentTarget.checked)
-
-        return (
-            <li>
-                <input
-                    onChange={changeTaskStatus}
-                    type="checkbox"
-                    checked={task.isDone}
-                />
-                <span className={task.isDone ? 'isDone' : ''}>{task.title}</span>
-                <button onClick={removeTask}>x</button>
-            </li>
-        )
-
-    })
-
-    const onClickAddTaskHandler = () => {        // вынесенная функция для баттон по добавлению таск
-        props.addTask(title)
-        setTitle('')
+    const tsarClickHandler = (filterValue: FilterValueType) => {
+        props.changeFilter(filterValue)
     }
-
-    const onKeyDownAddTask = (event: KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter' && event.ctrlKey) {
-            onClickAddTaskHandler()
-        }
-    }
-
-    const onChangeSetTitle = (event: ChangeEvent<HTMLInputElement>) => {
-        setTitle(event.currentTarget.value)
-    }
-
-    const onAllClickHandler = () => {
-        props.changeFilter('All')
-    }
-
-    const onActiveClickHandler = () => {
-        props.changeFilter('Active')
-    }
-
-    const onCompletedClickHandler = () => {
-        props.changeFilter('Completed')
-    }
-
-    /*   const tsarClickHandler = (filterValue: FilterValueType) => {
-           props.changeFilter(filterValue)*/
-
 
     return (
         <div>
             <h3>{props.title}</h3>
             <div>
-                <input
-                    value={title}
-                    onChange={onChangeSetTitle}     //функция для ввода данных
-                    onKeyDown={onKeyDownAddTask}   //функция по вводу данных по клавише ctrl+enter
-                />
+                <InputButton
+                    callBack={props.addTask}/>
 
-                <button onClick={onClickAddTaskHandler}>+</button>
+
+                {/*<input*/}
+                {/*    value={title}*/}
+                {/*    onChange={onChangeSetTitle}     //функция для ввода данных*/}
+                {/*    onKeyDown={onKeyDownAddTask}   //функция по вводу данных по клавише ctrl+enter*/}
+                {/*    className={error ? 'error' : ''}*/}
+                {/*/>*/}
+                {/*<button onClick={addTaskHandler}>+</button>*/}
+
+                {/*{error && <div style={{color: "red"}}>Title is required!</div>}*/}
+
             </div>
             <ul>
                 {tasksListItems}
             </ul>
             <div>
-                <button className={props.filter === 'All' ? 'active' : ''}
-                        onClick={onAllClickHandler}>All
-                </button>
-                <button className={props.filter === 'Active' ? 'active' : ''}
-                        onClick={onActiveClickHandler}>Active
-                </button>
-                <button className={props.filter === 'Completed' ? 'active' : ''}
-                        onClick={onCompletedClickHandler}>Completed
-                </button>
-
+                <Button name={'All'} callBack={() => tsarClickHandler('all')}/>
+                <Button name={'Active'} callBack={() => tsarClickHandler('active')}/>
+                <Button name={'Completed'} callBack={() => tsarClickHandler('completed')}/>
             </div>
         </div>
 
     );
 }
-
 
 export default TodoList;
