@@ -22,7 +22,7 @@ export type TaskType = {
 }
 
 
-const TodoList = (props: TodoListPropsType) => {
+export const TodoList = (props: TodoListPropsType) => {
     const [title, setTitle] = useState(' ') //для временного хранения новых тасок затем передаем параметр в функцию addTask
     const [error, setError] = useState<boolean>(false)
 
@@ -90,4 +90,3 @@ const TodoList = (props: TodoListPropsType) => {
     );
 }
 
-export default TodoList;
