@@ -1,8 +1,9 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent} from 'react';
 import './App.css';
 import {FilterValueType} from "./App";
 import {Button} from "./components/Button";
-import {Input} from "./components/Input";
+import {AddItemForm} from "./components/AddItemForm";
+import s from "./components/Button.module.css"
 
 
 type TodoListPropsType = {
@@ -24,8 +25,6 @@ export type TaskType = {
 }
 
 export const TodoList = (props: TodoListPropsType) => {
-    const [title, setTitle] = useState(' ') //для временного хранения новых тасок затем передаем параметр в функцию addTask
-    const [error, setError] = useState<boolean>(false)
 
     const tasksListItems = props.tasks.length
         ? props.tasks.map(task => {
@@ -48,20 +47,13 @@ export const TodoList = (props: TodoListPropsType) => {
         })
         : <span>Введите задачу</span>
 
-// вынесенная функция для баттон по добавлению таск
-    const addTaskHandler = () => {
-        const trimmedTitle = title.trim()
-        if (trimmedTitle) {
-            props.addTask(trimmedTitle, props.idTL)
-        } else {
-            setError(true)
-        }
-        setTitle('')
-    }
-
 // вынесенная ф-я для удаления ТудуЛиста
     const removeTodoList = () => {
         props.removeTodoList(props.idTL)
+    }
+
+    const addTask=(title: string) =>{
+        props.addTask(title, props.idTL)
     }
 
     const tsarClickHandler = (filterValue: FilterValueType) => {
@@ -72,27 +64,17 @@ export const TodoList = (props: TodoListPropsType) => {
         <div>
             {props.title}
             <Button name={'x'} callBack={removeTodoList} className={''}/>
-            <div>
-                <Input
-                    title={title}
-                    setTitle={setTitle}
-                    error={error}
-                    setError={setError}
-                    callBack={addTaskHandler}/>
+            <AddItemForm addItem={addTask}/>
 
-                <Button name={'+'} className={''} callBack={addTaskHandler}/>
-                {error && <div style={{color: "red"}}>Title is required!</div>}
-
-            </div>
             <ul>
                 {tasksListItems}
             </ul>
             <div>
-                <Button name={'All'} className={props.filter === 'all' ? 'active' : ''}
+                <Button name={'All'} className={props.filter === 'all' ? `${s.button} + " " + ${s.active}` : ''}
                         callBack={() => tsarClickHandler('all')}/>
-                <Button name={'Active'} className={props.filter === 'active' ? 'active' : ''}
+                <Button name={'Active'} className={props.filter === 'active' ? `${s.button} + " " + ${s.active}` : ''}
                         callBack={() => tsarClickHandler('active')}/>
-                <Button name={'Completed'} className={props.filter === 'completed' ? 'active' : ''}
+                <Button name={'Completed'} className={props.filter === 'completed' ? `${s.button} + " " + ${s.active}` : ''}
                         callBack={() => tsarClickHandler('completed')}/>
             </div>
         </div>
