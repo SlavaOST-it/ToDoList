@@ -53,10 +53,19 @@ const App = () => {
     const changeFilter = (filter: FilterValueType, todoListID: string) => {
         setTodoLists(todoLists.map(tl => tl.id === todoListID ? {...tl, filter: filter} : tl))
     }
+// изменение тазвания TodoList
+    const changeTitleTL = (title: string, todoListID: string) =>{
+        setTodoLists(todoLists.map(tl => tl.id === todoListID ? {...tl, title: title} : tl))
+    }
 //Изменение статуса isDone
     const changeTaskStatus = (taskID: string, isDone: boolean, todoListID: string) => {
         //(t => t.id === taskID ? {...t, isDone: isDone} : t))
         setTasks({...tasks, [todoListID]: tasks[todoListID].map(t => t.id === taskID ? {...t, isDone: isDone} : t)})
+    }
+// Изменение названия Task
+    const changeTaskTile = (taskID: string, title: string, todoListID: string) => {
+        //(t => t.id === taskID ? {...t, isDone: isDone} : t))
+        setTasks({...tasks, [todoListID]: tasks[todoListID].map(t => t.id === taskID ? {...t, title: title} : t)})
     }
 //удаление TodoList
     const removeTodoList = (todoListID: string) => {
@@ -101,6 +110,8 @@ const App = () => {
                 addTask={addTask}
                 removeTask={removeTask}
                 changeFilter={changeFilter}
+                changeTaskTile={changeTaskTile}
+                changeTitleTL={changeTitleTL}
                 removeTodoList={removeTodoList}
                 changeTaskStatus={changeTaskStatus}/>
         )

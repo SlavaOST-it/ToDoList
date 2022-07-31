@@ -9,7 +9,7 @@ type AddItemFormType = {
 export const AddItemForm: React.FC<AddItemFormType> = ({addItem}) => {
 
 
-    const [title, setTitle] = useState(' ') //для временного хранения новых тасок затем передаем параметр в функцию addTask
+    const [title, setTitle] = useState("") //для временного хранения новых тасок затем передаем параметр в функцию addTask
     const [error, setError] = useState<boolean>(false)
 
 
@@ -46,12 +46,6 @@ export const AddItemForm: React.FC<AddItemFormType> = ({addItem}) => {
                 onKeyDown={onKeyDownAddItem}   //функция по вводу данных по клавише ctrl+enter
                 className={error ? 'error' : ''}
             />
-            {/*<Input*/}
-            {/*    title={title}*/}
-            {/*    setTitle={setTitle}*/}
-            {/*    error={error}*/}
-            {/*    setError={setError}*/}
-            {/*    callBack={addTaskHandler}/>*/}
 
             <Button name={'+'} className={''} callBack={OnClickAddItemHandler}/>
             {error && <div style={{color: "red"}}>Title is required!</div>}
