@@ -49,13 +49,36 @@
     opacity: 1;
 }
 
+/*.button:focus {*/
+/*    box-shadow: inset 0 1px 0 -0.25px rgba(255, 255, 255, 0.2), 0 0.5px 1px rgba(0, 0, 0, 0.1), 0 0 0 4px rgba(58, 108, 217, 0.5);*/
+/*    outline: 0;*/
+/*    background-color: #6bbb6b;*/
+/*}*/
 
-.button:focus {
-    box-shadow: inset 0 1px 0 -0.25px rgba(255, 255, 255, 0.2), 0 0.5px 1px rgba(0, 0, 0, 0.1), 0 0 0 4px rgba(58, 108, 217, 0.5);
-    outline: 0;
-    background-color: coral;
+.active{
+    background-color: #99f663;
+    border: 1px solid #222222;
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: #222222;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    margin: 3px;
+    outline: none;
+    padding: 3px 10px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    touch-action: manipulation;
+    transition: box-shadow .2s, -ms-transform .1s, -webkit-transform .1s, transform .1s;
+    user-select: none;
+    -webkit-user-select: none;
+    width: auto;
 }
-
 .red {
     background: #ea6f6f;
 }

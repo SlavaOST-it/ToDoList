@@ -14,7 +14,7 @@ export const Button = (props: ButtonType) => {
         props.callBack()
     }
 
-    const finishClassName = `${props.className} ${s.button}`
+    const finishClassName = `${s.button} ${props.className}`
     return (
         <button className={finishClassName} onClick={onClickHandler}>{props.name}</button>
     );

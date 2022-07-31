@@ -13,11 +13,11 @@
     font-weight: lighter;
 }
 
-.active {
-    background-color: green;
-    color: white;
-    font-weight: bold;
-}
+/*.active {*/
+/*    background-color: green;*/
+/*    color: white;*/
+/*    font-weight: bold;*/
+/*}*/
 
 .error {
     border: 3px solid red;
