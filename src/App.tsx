@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {TodoList, TaskType} from "./TodoList";
 import {v1} from 'uuid';
+import {AddItemForm} from "./components/AddItemForm";
 
 export type FilterValueType = 'all' | 'active' | 'completed'
 type TodoListType = {
@@ -62,6 +63,17 @@ const App = () => {
         setTodoLists(todoLists.filter(tl => tl.id !== todoListID))
         delete tasks[todoListID]
     }
+// добавление TodoList
+    const addTodoList = (title: string) => {
+        const newTodoListID = v1();
+        const newTodoList: TodoListType = {
+            id: newTodoListID,
+            title: title,
+            filter: "all"
+        }
+        setTodoLists([...todoLists, newTodoList])
+        setTasks({...tasks, [newTodoListID]: []})
+    }
 
 //UI:
     const TodoListsComponents = todoLists.map(tl => {
@@ -96,6 +108,7 @@ const App = () => {
 
     return (
         <div className="App">
+            <AddItemForm addItem={addTodoList}/>
             {TodoListsComponents}
         </div>
     );
