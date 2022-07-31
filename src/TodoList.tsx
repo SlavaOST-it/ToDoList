@@ -4,6 +4,9 @@ import {FilterValueType} from "./App";
 import {Button} from "./components/Button";
 import {AddItemForm} from "./components/AddItemForm";
 import s from "./components/Button.module.css"
+import {EditableSpan} from "./components/EditableSpan";
+
+
 
 
 type TodoListPropsType = {
@@ -13,9 +16,11 @@ type TodoListPropsType = {
     filter: FilterValueType
     removeTask: (taskID: string, idTL: string) => void
     removeTodoList: (todoListID: string) => void
+    changeTaskTile: (taskID: string, title: string, todoListID: string) => void
     changeFilter: (filter: FilterValueType, idTL: string) => void
     addTask: (title: string, idTL: string) => void
     changeTaskStatus: (taskID: string, isDone: boolean, idTL: string) => void
+    changeTitleTL: (title: string, todoListID: string) => void
 }
 
 export type TaskType = {
@@ -32,14 +37,17 @@ export const TodoList = (props: TodoListPropsType) => {
             const changeTaskStatus = (event: ChangeEvent<HTMLInputElement>) =>
                 props.changeTaskStatus(task.id, event.currentTarget.checked, props.idTL)
 
+            // ф-ия для изменения названия таски
+            const changeTaskTitle = (title: string) => props.changeTaskTile(task.id, title, props.idTL)
+
             return (
-                <li key={task.id}>
+                <li className={task.isDone ? 'isDone' : ''} key={task.id}>
                     <input
                         onChange={changeTaskStatus}
                         type="checkbox"
                         checked={task.isDone}
                     />
-                    <span className={task.isDone ? 'isDone' : ''}>{task.title}</span>
+                    <EditableSpan title={task.title} changeTitle={changeTaskTitle}/>
                     <Button name={'x'} callBack={removeTask} className={''}/>
                 </li>
             )
@@ -52,7 +60,9 @@ export const TodoList = (props: TodoListPropsType) => {
         props.removeTodoList(props.idTL)
     }
 
-    const addTask=(title: string) =>{
+    const changeTitleTL = (title: string) => props.changeTitleTL(title, props.idTL)
+
+    const addTask = (title: string) => {
         props.addTask(title, props.idTL)
     }
 
@@ -62,8 +72,11 @@ export const TodoList = (props: TodoListPropsType) => {
 
     return (
         <div>
-            {props.title}
-            <Button name={'x'} callBack={removeTodoList} className={''}/>
+            <h3>
+                <EditableSpan title={props.title} changeTitle={changeTitleTL}/>
+                <Button name={'x'} callBack={removeTodoList} className={''}/>
+            </h3>
+
             <AddItemForm addItem={addTask}/>
 
             <ul>
@@ -74,7 +87,8 @@ export const TodoList = (props: TodoListPropsType) => {
                         callBack={() => tsarClickHandler('all')}/>
                 <Button name={'Active'} className={props.filter === 'active' ? `${s.button} + " " + ${s.active}` : ''}
                         callBack={() => tsarClickHandler('active')}/>
-                <Button name={'Completed'} className={props.filter === 'completed' ? `${s.button} + " " + ${s.active}` : ''}
+                <Button name={'Completed'}
+                        className={props.filter === 'completed' ? `${s.button} + " " + ${s.active}` : ''}
                         callBack={() => tsarClickHandler('completed')}/>
             </div>
         </div>
