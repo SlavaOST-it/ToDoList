@@ -7,8 +7,6 @@ import s from "./components/Button.module.css"
 import {EditableSpan} from "./components/EditableSpan";
 
 
-
-
 type TodoListPropsType = {
     idTL: string
     title: string
@@ -48,6 +46,7 @@ export const TodoList = (props: TodoListPropsType) => {
                         checked={task.isDone}
                     />
                     <EditableSpan title={task.title} changeTitle={changeTaskTitle}/>
+
                     <Button name={'x'} callBack={removeTask} className={''}/>
                 </li>
             )
@@ -83,6 +82,7 @@ export const TodoList = (props: TodoListPropsType) => {
                 {tasksListItems}
             </ul>
             <div>
+
                 <Button name={'All'} className={props.filter === 'all' ? `${s.button} + " " + ${s.active}` : ''}
                         callBack={() => tsarClickHandler('all')}/>
                 <Button name={'Active'} className={props.filter === 'active' ? `${s.button} + " " + ${s.active}` : ''}

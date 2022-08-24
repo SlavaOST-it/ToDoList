@@ -5,13 +5,13 @@ import {v1} from 'uuid';
 import {AddItemForm} from "./components/AddItemForm";
 
 export type FilterValueType = 'all' | 'active' | 'completed'
-type TodoListType = {
+export type TodoListType = {
     id: string
     title: string,
     filter: FilterValueType
 }
 
-type TaskStateType = {
+export type TaskStateType = {
     [todoListID: string]: Array<TaskType>
 }
 
@@ -41,6 +41,7 @@ const App = () => {
     })
 
 // function:
+// tasks
 //добавляем новую таску. Жестко ее создаем и сетаем. Потом накидываем эту функцию на кнопку +
     const addTask = (title: string, todoListID: string) => {
         setTasks({...tasks, [todoListID]: [{id: v1(), title: title, isDone: false}, ...tasks[todoListID]]})
@@ -48,14 +49,6 @@ const App = () => {
 //Удаление таски
     const removeTask = (taskID: string, todoListID: string) => {
         setTasks({...tasks, [todoListID]: tasks[todoListID].filter(task => task.id !== taskID)})
-    }
-//Фильтруем таски по All, active, completed
-    const changeFilter = (filter: FilterValueType, todoListID: string) => {
-        setTodoLists(todoLists.map(tl => tl.id === todoListID ? {...tl, filter: filter} : tl))
-    }
-// изменение тазвания TodoList
-    const changeTitleTL = (title: string, todoListID: string) =>{
-        setTodoLists(todoLists.map(tl => tl.id === todoListID ? {...tl, title: title} : tl))
     }
 //Изменение статуса isDone
     const changeTaskStatus = (taskID: string, isDone: boolean, todoListID: string) => {
@@ -67,10 +60,20 @@ const App = () => {
         //(t => t.id === taskID ? {...t, isDone: isDone} : t))
         setTasks({...tasks, [todoListID]: tasks[todoListID].map(t => t.id === taskID ? {...t, title: title} : t)})
     }
+
+// TodoList
+//Фильтруем таски по All, active, completed
+    const changeFilter = (filter: FilterValueType, todoListID: string) => {
+        setTodoLists(todoLists.map(tl => tl.id === todoListID ? {...tl, filter: filter} : tl))
+    }
 //удаление TodoList
     const removeTodoList = (todoListID: string) => {
         setTodoLists(todoLists.filter(tl => tl.id !== todoListID))
         delete tasks[todoListID]
+    }
+// изменение тазвания TodoList
+    const changeTitleTL = (title: string, todoListID: string) =>{
+        setTodoLists(todoLists.map(tl => tl.id === todoListID ? {...tl, title: title} : tl))
     }
 // добавление TodoList
     const addTodoList = (title: string) => {
