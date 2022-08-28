@@ -63,7 +63,7 @@ const App = () => {
 
 // TodoList
 //Фильтруем таски по All, active, completed
-    const changeFilter = (filter: FilterValueType, todoListID: string) => {
+    const changeFilter = (todoListID: string, filter: FilterValueType,) => {
         setTodoLists(todoLists.map(tl => tl.id === todoListID ? {...tl, filter: filter} : tl))
     }
 //удаление TodoList

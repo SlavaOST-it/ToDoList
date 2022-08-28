@@ -15,7 +15,7 @@ type TodoListPropsType = {
     removeTask: (taskID: string, idTL: string) => void
     removeTodoList: (todoListID: string) => void
     changeTaskTile: (taskID: string, title: string, todoListID: string) => void
-    changeFilter: (filter: FilterValueType, idTL: string) => void
+    changeFilter: (idTL: string, filter: FilterValueType ) => void
     addTask: (title: string, idTL: string) => void
     changeTaskStatus: (taskID: string, isDone: boolean, idTL: string) => void
     changeTitleTL: (title: string, todoListID: string) => void
@@ -66,7 +66,7 @@ export const TodoList = (props: TodoListPropsType) => {
     }
 
     const tsarClickHandler = (filterValue: FilterValueType) => {
-        props.changeFilter(filterValue, props.idTL)
+        props.changeFilter(props.idTL, filterValue)
     }
 
     return (
