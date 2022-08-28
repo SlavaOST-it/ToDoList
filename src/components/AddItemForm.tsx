@@ -3,7 +3,8 @@ import {Button} from "./Button";
 import "../App.css"
 
 type AddItemFormType = {
-   addItem: (title: string) => void
+   addItem: (title: string, ) => void
+
 }
 
 export const AddItemForm: React.FC<AddItemFormType> = ({addItem}) => {
