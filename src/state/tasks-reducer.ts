@@ -32,7 +32,6 @@ export const tasksReducer = (state = initialState, action: ActionsType): TaskSta
                 ...state,
                 [action.payload.todolistId]: [newTask, ...state[action.payload.todolistId]]
             }
-
         }
 
         case 'CHANGE-TASK-STATUS': {

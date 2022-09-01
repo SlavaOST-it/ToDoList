@@ -1,14 +1,12 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
 import {Button} from "./Button";
 import "../App.css"
 
 type AddItemFormType = {
-   addItem: (title: string, ) => void
-
+   addItem: (title: string) => void
 }
 
-export const AddItemForm: React.FC<AddItemFormType> = ({addItem}) => {
-
+export const AddItemForm: React.FC<AddItemFormType> = memo(({addItem}) => {
 
     const [title, setTitle] = useState("") //для временного хранения новых тасок затем передаем параметр в функцию addTask
     const [error, setError] = useState<boolean>(false)
@@ -23,6 +21,7 @@ export const AddItemForm: React.FC<AddItemFormType> = ({addItem}) => {
 
     //ввод данных по нажатию клавиш
     const onKeyDownAddItem = (event: KeyboardEvent<HTMLInputElement>) => {
+        if(error)setError(false)
         if (event.key === 'Enter' && event.ctrlKey) {
             OnClickAddItemHandler()
         }
@@ -53,5 +52,5 @@ export const AddItemForm: React.FC<AddItemFormType> = ({addItem}) => {
 
         </div>
     );
-};
+})
 

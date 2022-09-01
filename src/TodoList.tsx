@@ -1,10 +1,12 @@
-import React, {ChangeEvent} from 'react';
+import React, {memo, useCallback, useMemo} from 'react';
 import './App.css';
 import {FilterValueType} from "./App";
 import {Button} from "./components/Button";
 import {AddItemForm} from "./components/AddItemForm";
 import s from "./components/Button.module.css"
 import {EditableSpan} from "./components/EditableSpan";
+import {Task} from "./components/Task";
+import {TaskWithRedux} from "./components/TaskWithRedux";
 
 
 type TodoListPropsType = {
@@ -15,7 +17,7 @@ type TodoListPropsType = {
     removeTask: (taskID: string, idTL: string) => void
     removeTodoList: (todoListID: string) => void
     changeTaskTile: (taskID: string, title: string, todoListID: string) => void
-    changeFilter: (idTL: string, filter: FilterValueType ) => void
+    changeFilter: (idTL: string, filter: FilterValueType) => void
     addTask: (title: string, idTL: string) => void
     changeTaskStatus: (taskID: string, isDone: boolean, idTL: string) => void
     changeTitleTL: (title: string, todoListID: string) => void
@@ -27,47 +29,60 @@ export type TaskType = {
     isDone: boolean
 }
 
-export const TodoList = (props: TodoListPropsType) => {
+export const TodoList = memo((props: TodoListPropsType) => {
+    console.log("TodoList")
 
-    const tasksListItems = props.tasks.length
-        ? props.tasks.map(task => {
-            const removeTask = () => props.removeTask(task.id, props.idTL)
-            const changeTaskStatus = (event: ChangeEvent<HTMLInputElement>) =>
-                props.changeTaskStatus(task.id, event.currentTarget.checked, props.idTL)
+    // const removeTask = useCallback((taskId: string) => props.removeTask(taskId, props.idTL),
+    //     [props.removeTask, props.idTL])
+    // const changeTaskStatus = useCallback((taskId: string, newTaskStatus: boolean) => {
+    //     props.changeTaskStatus(taskId, newTaskStatus, props.idTL)
+    // }, [props.changeTaskStatus, props.idTL])
+    //
+    // // ф-ия для изменения названия таски
+    // const changeTaskTitle = useCallback((taskId: string, title: string) => {
+    //     props.changeTaskTile(taskId, title, props.idTL)
+    // }, [props.changeTaskTile, props.idTL])
 
-            // ф-ия для изменения названия таски
-            const changeTaskTitle = (title: string) => props.changeTaskTile(task.id, title, props.idTL)
-
-            return (
-                <li className={task.isDone ? 'isDone' : ''} key={task.id}>
-                    <input
-                        onChange={changeTaskStatus}
-                        type="checkbox"
-                        checked={task.isDone}
-                    />
-                    <EditableSpan title={task.title} changeTitle={changeTaskTitle}/>
-
-                    <Button name={'x'} callBack={removeTask} className={''}/>
-                </li>
-            )
-
-        })
-        : <span>Введите задачу</span>
 
 // вынесенная ф-я для удаления ТудуЛиста
     const removeTodoList = () => {
         props.removeTodoList(props.idTL)
     }
 
-    const changeTitleTL = (title: string) => props.changeTitleTL(title, props.idTL)
+    const changeTitleTL = useCallback((title: string) => {
+        props.changeTitleTL(title, props.idTL)
+    }, [props.changeTitleTL, props.idTL])
 
-    const addTask = (title: string) => {
+    const addTask = useCallback((title: string) => {
         props.addTask(title, props.idTL)
-    }
+    }, [props.addTask, props.idTL])
 
     const tsarClickHandler = (filterValue: FilterValueType) => {
         props.changeFilter(props.idTL, filterValue)
     }
+
+
+    let tasks = props.tasks;
+    switch (props.filter) {
+        case 'completed':
+            tasks = tasks.filter(t => t.isDone)
+            break;
+        case 'active':
+            tasks = tasks.filter(t => !t.isDone)
+            break;
+        default:
+            tasks = tasks
+            break;
+    }
+
+    const tasksListItems = props.tasks.length
+        ? tasks.map(t => {
+            return (
+                <TaskWithRedux key={t.id} task={t} todolistId={props.idTL}/>
+            )
+        })
+        : <span>Введите задачу</span>
+
 
     return (
         <div>
@@ -94,5 +109,5 @@ export const TodoList = (props: TodoListPropsType) => {
         </div>
 
     );
-}
+})
 

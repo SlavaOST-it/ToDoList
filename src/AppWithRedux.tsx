@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
 import {TodoList, TaskType} from "./TodoList";
 import {AddItemForm} from "./components/AddItemForm";
@@ -6,18 +6,17 @@ import {
     AddTodoListAC,
     ChangeTitleTodoListAC,
     ChangeTodoListFilterAC,
-    RemoveTodoListAC,
-    todoListsReducer
-} from "./reducers/todo-lists-reducer";
+    RemoveTodoListAC
+} from "./state/todo-lists-reducer";
 import {
     addTaskAC,
     changeTaskStatusAC,
     changeTaskTitleAC,
-    removeTaskAC,
-    tasksReducer
-} from "./reducers/tasks-reducer";
-import {combineReducers, createStore} from "redux";
+    removeTaskAC
+} from "./state/tasks-reducer";
+
 import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "./state/state";
 
 
 export type FilterValueType = 'all' | 'active' | 'completed'
@@ -31,15 +30,6 @@ export type TaskStateType = {
     [todoListID: string]: Array<TaskType>
 }
 
-const rootReducer = combineReducers({
-    tasks: tasksReducer,
-    todoLists: todoListsReducer
-})
-
-export const store = createStore(rootReducer)
-export type AppRootStateType = ReturnType<typeof rootReducer>
-// @ts-ignore
-window.store = store
 
 const AppWithRedux = () => {
 
@@ -50,64 +40,53 @@ const AppWithRedux = () => {
 // function:
 // tasks
 //добавляем новую таску. Жестко ее создаем и сетаем. Потом накидываем эту функцию на кнопку +
-    const addTask = (title: string, todoListID: string) => {
+    const addTask = useCallback((title: string, todoListID: string) => {
         dispatch(addTaskAC(title, todoListID))
-    }
+    }, [dispatch])
 //Удаление таски
-    const removeTask = (taskID: string, todolistId: string) => {
+    const removeTask = useCallback((taskID: string, todolistId: string) => {
         dispatch(removeTaskAC(taskID, todolistId))
-    }
+    },[dispatch])
 //Изменение статуса isDone
-    const changeTaskStatus = (taskId: string, isDone: boolean, todolistId: string) => {
+    const changeTaskStatus = useCallback((taskId: string, isDone: boolean, todolistId: string) => {
         dispatch(changeTaskStatusAC(taskId, isDone, todolistId))
-    }
+    }, [dispatch])
 // Изменение названия Task
-    const changeTaskTile = (taskId: string, title: string, todolistId: string) => {
+    const changeTaskTile = useCallback((taskId: string, title: string, todolistId: string) => {
         dispatch(changeTaskTitleAC(taskId, title, todolistId))
-    }
+    }, [dispatch])
 
 // TodoList
 //Фильтруем таски по All, active, completed
-    const changeFilter = (id: string, filter: FilterValueType) => {
+    const changeFilter = useCallback((id: string, filter: FilterValueType) => {
         dispatch(ChangeTodoListFilterAC(id, filter))
-    }
+    }, [dispatch])
 //удаление TodoList
-    const removeTodoList = (id: string) => {
+    const removeTodoList = useCallback((id: string) => {
         dispatch(RemoveTodoListAC(id))
-    }
+    }, [dispatch])
 // изменение тазвания TodoList
-    const changeTitleTL = (id: string, title: string) => {
+    const changeTitleTL = useCallback((id: string, title: string) => {
         dispatch(ChangeTitleTodoListAC(id, title))
-    }
+    }, [dispatch])
 // добавление TodoList
-    const addTodoList = (title: string) => {
+    const addTodoList = useCallback((title: string) => {
         const action = AddTodoListAC(title)
         // dispatch(action)
         dispatch(action)
-    }
+    }, [dispatch])
 
 //UI:
     const TodoListsComponents = todoLists.map(tl => {
 
-        let tasksForRender;
-        switch (tl.filter) {
-            case 'completed':
-                tasksForRender = tasks[tl.id].filter(t => t.isDone)
-                break;
-            case 'active':
-                tasksForRender = tasks[tl.id].filter(t => !t.isDone)
-                break;
-            default:
-                tasksForRender = tasks[tl.id]
-                break;
-        }
+
         return (
             <TodoList
                 key={tl.id}
                 idTL={tl.id}
                 title={tl.title}
                 filter={tl.filter}
-                tasks={tasksForRender}
+                tasks={tasks[tl.id]}
 
                 addTask={addTask}
                 removeTask={removeTask}
