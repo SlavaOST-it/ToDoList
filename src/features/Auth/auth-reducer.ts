@@ -21,6 +21,7 @@ export const login = createAsyncThunk<undefined, LoginParamsType,
         return handleAsyncServerNetworkError(error, thunkAPI)
     }
 })
+
 export const logout = createAsyncThunk('auth/logout', async (param, thunkAPI) => {
     thunkAPI.dispatch(setAppStatus({status: 'loading'}))
     try {
@@ -62,7 +63,5 @@ export const slice = createSlice({
     }
 })
 
-export const authReducer = slice.reducer
-export const {setIsLoggedIn} = slice.actions
 
 

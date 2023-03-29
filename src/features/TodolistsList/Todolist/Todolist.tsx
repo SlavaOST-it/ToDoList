@@ -9,6 +9,7 @@ import {tasksActions, todolistsActions} from '../index'
 import {TaskStatuses, TaskType} from '../../../api/types'
 import {useActions, useAppDispatch} from '../../../utils/redux-utils'
 
+
 type PropsType = {
     todolist: TodolistDomainType
     tasks: Array<TaskType>
@@ -101,6 +102,3 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
         </div>
     </Paper>
 })
-
-
-

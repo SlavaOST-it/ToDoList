@@ -19,11 +19,13 @@ export const fetchTasks = createAsyncThunk<{ tasks: TaskType[], todolistId: stri
         return handleAsyncServerNetworkError(error, thunkAPI)
     }
 })
+
 export const removeTask = createAsyncThunk<{ taskId: string, todolistId: string }, { taskId: string, todolistId: string }, ThunkError>('tasks/removeTask',
-    async (param, thunkAPI) => {
-        const res = await todolistsAPI.deleteTask(param.todolistId, param.taskId)
+    async (param) => {
+        await todolistsAPI.deleteTask(param.todolistId, param.taskId)
         return {taskId: param.taskId, todolistId: param.todolistId}
     })
+
 export const addTask = createAsyncThunk<TaskType, { title: string, todolistId: string }, ThunkError>('tasks/addTask',
     async (param, thunkAPI) => {
         thunkAPI.dispatch(appActions.setAppStatus({status: 'loading'}))
@@ -40,6 +42,7 @@ export const addTask = createAsyncThunk<TaskType, { title: string, todolistId: s
             return handleAsyncServerNetworkError(err, thunkAPI, false)
         }
     })
+
 export const updateTask = createAsyncThunk('tasks/updateTask', async (param: { taskId: string, model: UpdateDomainTaskModelType, todolistId: string },
                                                                       thunkAPI) => {
     const state = thunkAPI.getState() as AppRootStateType
@@ -127,6 +130,7 @@ export type UpdateDomainTaskModelType = {
     startDate?: string
     deadline?: string
 }
+
 export type TasksStateType = {
     [key: string]: Array<TaskType>
 }
